@@ -79,7 +79,7 @@ void main_online()
     if (expId == 515)
     {
         // filename = "--stream=lxlanddaq01:9001";
-        filename = "~/lmd/s515/main0484_0001.lmd";
+        filename = "~/lmd/s515/main0484_0001_stit.lmd";
 
         TString outputpath = "/d/land5/202104_s515/rootfiles/sofia/";
         // outputFilename = outputpath + "s515_data_sofia_online_" + oss.str() + ".root";
@@ -100,9 +100,9 @@ void main_online()
 
     // store data or not ------------------------------------
     Bool_t fCal_level_califa = false; // set true if there exists a file with the calibration parameters
-    Bool_t NOTstoremappeddata = true; // if true, don't store mapped data in the root file
-    Bool_t NOTstorecaldata = true;    // if true, don't store cal data in the root file
-    Bool_t NOTstorehitdata = true;    // if true, don't store hit data in the root file
+    Bool_t NOTstoremappeddata = false; // if true, don't store mapped data in the root file
+    Bool_t NOTstorecaldata = false;    // if true, don't store cal data in the root file
+    Bool_t NOTstorehitdata = false;    // if true, don't store hit data in the root file
 
     // Online server configuration --------------------------
     Int_t refresh = 1; // Refresh rate for online histograms
@@ -167,6 +167,8 @@ void main_online()
     source->SetMaxEvents(nev);
 
     // Definition of reader ---------------------------------
+    //R3BFrsReaderNov19* unpackfrs;
+
     R3BMusicReader* unpackmusic;
     R3BLosReader* unpacklos;
     R3BAmsReader* unpackams;
