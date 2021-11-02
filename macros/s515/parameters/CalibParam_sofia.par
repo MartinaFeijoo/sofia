@@ -93,17 +93,24 @@ IonisationEnergy: Double_t 57.4e-6
 [IncomingIDPar]
 //----------------------------------------------------------------------------
 NumDet: Int_t 1
-Brho: Float_t  13.0721;
 TofOffset: Float_t -5644.95117
 PosS2Left: Float_t -200
 PosS2Right: Float_t 200
 Tof2InvV_p0: Float_t 67.69245
 Tof2InvV_p1: Float_t 0.007198663
-Brho0_S2toCC: Float_t 9.458
+Brho0_S2toCC: Float_t 13.0721
 DispersionS2: Float_t 7000
 x0_point: Float_t 0
 y0_point: Float_t 50.39
 rot_ang: Float_t 0.00375
+#############################################################################
+#############################################################################
+# Class: Sci2HitPar
+# Context: Sci2HitParContext
+#############################################################################
+[Sci2HitPar]
+Pos_p0: Float_t 126.451
+Pos_p1: Float_t 56.785
 #############################################################################
 #############################################################################
 # Class:   GladFieldPar
