@@ -27,7 +27,7 @@ typedef struct EXT_STR_h101_t
     EXT_STR_h101_SOFMWPC_onion_t mwpc;
 
     EXT_STR_h101_WRMASTER_t wrmaster;
-    EXT_STR_h101_WRCALIFA_t wrcalifa;
+    //EXT_STR_h101_WRCALIFA_t wrcalifa;
     EXT_STR_h101_WRNEULAND_t wrneuland;
     EXT_STR_h101_WRSOFIA_t wrsofia;
     EXT_STR_h101_WRS2_t wrs2;
@@ -79,7 +79,7 @@ void main_online()
     if (expId == 515)
     {
         // filename = "--stream=lxlanddaq01:9001";
-        filename = "~/lmd/s515/main0484_0001_stit.lmd";
+        filename = "~/lmd/s515/main0484_*_stit.lmd";
 
         TString outputpath = "/d/land5/202104_s515/rootfiles/sofia/";
         // outputFilename = outputpath + "s515_data_sofia_online_" + oss.str() + ".root";
@@ -91,6 +91,7 @@ void main_online()
         ucesb_path = upexps_dir + "/202104_s515/202104_s515 --allow-errors --input-buffer=100Mi";
         ucesb_path.ReplaceAll("//", "/");
         sofiacaldir = dir + "/sofia/macros/s515/parameters/";
+
     }
     else
     {
@@ -100,9 +101,9 @@ void main_online()
 
     // store data or not ------------------------------------
     Bool_t fCal_level_califa = false; // set true if there exists a file with the calibration parameters
-    Bool_t NOTstoremappeddata = false; // if true, don't store mapped data in the root file
-    Bool_t NOTstorecaldata = false;    // if true, don't store cal data in the root file
-    Bool_t NOTstorehitdata = false;    // if true, don't store hit data in the root file
+    Bool_t NOTstoremappeddata = true; // if true, don't store mapped data in the root file
+    Bool_t NOTstorecaldata = true;    // if true, don't store cal data in the root file
+    Bool_t NOTstorehitdata = true;    // if true, don't store hit data in the root file
 
     // Online server configuration --------------------------
     Int_t refresh = 1; // Refresh rate for online histograms
@@ -110,14 +111,14 @@ void main_online()
 
     // Setup: Selection of detectors ------------------------
     // --- FRS --------------------------------------------------------------------------
-    Bool_t fFrsid = true;   // FRS for production of exotic beams (just scintillators)
+    Bool_t fFrsid = false;   // FRS for production of exotic beams (just scintillators)
     Bool_t fFrsSci = false; // Start: Plastic scintillators at FRS
     // --- R3B standard -----------------------------------------------------------------
     Bool_t fNeuland = false; // NeuLAND for neutrons behind GLAD
-    Bool_t fLos = true;      // Los scintillator for R3B experiments
+    Bool_t fLos = false;      // Los scintillator for R3B experiments
     Bool_t fAms = false;     // AMS tracking detectors
     Bool_t fCalifa = false;  // Califa calorimeter
-    Bool_t fMusic = true;    // R3B-Music: Ionization chamber for charge-Z before GLAD
+    Bool_t fMusic = false;    // R3B-Music: Ionization chamber for charge-Z before GLAD
     Bool_t fPsp = false;     // Psp: Silicon detectors for tracking
     // --- Sofia ------------------------------------------------------------------------
     Bool_t fMwpc0 = false; // MWPC0 for tracking at entrance of GLAD
@@ -167,8 +168,6 @@ void main_online()
     source->SetMaxEvents(nev);
 
     // Definition of reader ---------------------------------
-    //R3BFrsReaderNov19* unpackfrs;
-
     R3BMusicReader* unpackmusic;
     R3BLosReader* unpacklos;
     R3BAmsReader* unpackams;
@@ -179,14 +178,14 @@ void main_online()
     R3BSci2Reader* unpacks2;
     R3BSofMwpcReader* unpackmwpc;
 
-    R3BWhiterabbitS2Reader* unpackWRS2;
-    R3BWhiterabbitMasterReader* unpackWRMaster;
-    R3BWhiterabbitCalifaReader* unpackWRCalifa;
-    R3BSofWhiterabbitReader* unpackWRSofia;
-    R3BWhiterabbitNeulandReader* unpackWRNeuland;
+    // R3BWhiterabbitS2Reader* unpackWRS2;
+    // R3BWhiterabbitMasterReader* unpackWRMaster;
+    // R3BWhiterabbitCalifaReader* unpackWRCalifa;
+    // R3BSofWhiterabbitReader* unpackWRSofia;
+    // R3BWhiterabbitNeulandReader* unpackWRNeuland;
 
-    unpackWRMaster = new R3BWhiterabbitMasterReader(
-        (EXT_STR_h101_WRMASTER*)&ucesb_struct.wrmaster, offsetof(EXT_STR_h101, wrmaster), 0x1000);
+    // unpackWRMaster = new R3BWhiterabbitMasterReader(
+    //     (EXT_STR_h101_WRMASTER*)&ucesb_struct.wrmaster, offsetof(EXT_STR_h101, wrmaster), 0x1000);
 
     if (fFrsid)
         unpacks2 = new R3BSci2Reader(&ucesb_struct.s2, offsetof(EXT_STR_h101_t, s2));
@@ -204,10 +203,10 @@ void main_online()
 
     if (fFrsSci)
     {
-        unpackWRS2 =
-            new R3BWhiterabbitS2Reader((EXT_STR_h101_WRS2*)&ucesb_struct.wrs2, offsetof(EXT_STR_h101, wrs2), 0x200);
-        unpackWRSofia = new R3BSofWhiterabbitReader(
-            (EXT_STR_h101_WRSOFIA*)&ucesb_struct.wrsofia, offsetof(EXT_STR_h101, wrsofia), 0x1100, 0);
+        // unpackWRS2 =
+        //     new R3BWhiterabbitS2Reader((EXT_STR_h101_WRS2*)&ucesb_struct.wrs2, offsetof(EXT_STR_h101, wrs2), 0x200);
+        // unpackWRSofia = new R3BSofWhiterabbitReader(
+        //     (EXT_STR_h101_WRSOFIA*)&ucesb_struct.wrsofia, offsetof(EXT_STR_h101, wrsofia), 0x1100, 0);
     }
 
     if (fAms)
@@ -217,8 +216,8 @@ void main_online()
     {
         unpackcalifa =
             new R3BCalifaFebexReader((EXT_STR_h101_CALIFA*)&ucesb_struct.califa, offsetof(EXT_STR_h101, califa));
-        unpackWRCalifa = new R3BWhiterabbitCalifaReader(
-            (EXT_STR_h101_WRCALIFA*)&ucesb_struct.wrcalifa, offsetof(EXT_STR_h101, wrcalifa), 0xa00, 0xb00);
+        //unpackWRCalifa = new R3BWhiterabbitCalifaReader(
+            //(EXT_STR_h101_WRCALIFA*)&ucesb_struct.wrcalifa, offsetof(EXT_STR_h101, wrcalifa), 0xa00, 0xb00);
     }
     if (fMwpc0)
         unpackmwpc = new R3BSofMwpcReader((EXT_STR_h101_SOFMWPC_t*)&ucesb_struct.mwpc, offsetof(EXT_STR_h101, mwpc));
@@ -231,13 +230,13 @@ void main_online()
         // unpackneuland = new R3BNeulandTamexReader((EXT_STR_h101_raw_nnp_tamex_t*)&ucesb_struct.raw_nnp,
         //                                        offsetof(EXT_STR_h101, raw_nnp));
 
-        unpackWRNeuland = new R3BWhiterabbitNeulandReader(
-            (EXT_STR_h101_WRNEULAND*)&ucesb_struct.wrneuland, offsetof(EXT_STR_h101, wrneuland), 0x900);
+        // unpackWRNeuland = new R3BWhiterabbitNeulandReader(
+        //     (EXT_STR_h101_WRNEULAND*)&ucesb_struct.wrneuland, offsetof(EXT_STR_h101, wrneuland), 0x900);
     }
 
     // Add readers ------------------------------------------
-    source->AddReader(new R3BUnpackReader(&ucesb_struct.unpack, offsetof(EXT_STR_h101, unpack)));
-    source->AddReader(new R3BTrloiiTpatReader(&ucesb_struct.unpacktpat, offsetof(EXT_STR_h101, unpacktpat)));
+    // source->AddReader(new R3BUnpackReader(&ucesb_struct.unpack, offsetof(EXT_STR_h101, unpack)));
+    // source->AddReader(new R3BTrloiiTpatReader(&ucesb_struct.unpacktpat, offsetof(EXT_STR_h101, unpacktpat)));
 
     if (fFrsid)
     {
@@ -263,10 +262,10 @@ void main_online()
 
     if (fFrsSci)
     {
-        unpackWRS2->SetOnline(NOTstoremappeddata);
-        source->AddReader(unpackWRS2);
-        unpackWRSofia->SetOnline(NOTstoremappeddata);
-        source->AddReader(unpackWRSofia);
+        // unpackWRS2->SetOnline(NOTstoremappeddata);
+        // source->AddReader(unpackWRS2);
+        // unpackWRSofia->SetOnline(NOTstoremappeddata);
+        // source->AddReader(unpackWRSofia);
     }
 
     if (fMwpc0)
@@ -283,8 +282,8 @@ void main_online()
     {
         unpackcalifa->SetOnline(NOTstoremappeddata);
         source->AddReader(unpackcalifa);
-        unpackWRCalifa->SetOnline(NOTstoremappeddata);
-        source->AddReader(unpackWRCalifa);
+        //unpackWRCalifa->SetOnline(NOTstoremappeddata);
+        //source->AddReader(unpackWRCalifa);
     }
     if (fTofD)
     {
@@ -293,8 +292,8 @@ void main_online()
     }
     if (fNeuland)
     {
-        unpackWRNeuland->SetOnline(NOTstoremappeddata);
-        source->AddReader(unpackWRNeuland);
+        //unpackWRNeuland->SetOnline(NOTstoremappeddata);
+        //source->AddReader(unpackWRNeuland);
     }
     run->SetSource(source);
 
@@ -486,14 +485,14 @@ void main_online()
     }
 
     // R3B-Scintillator LOS
-    if (fLos)
-    {
-        R3BLosMapped2Cal* losMapped2Cal = new R3BLosMapped2Cal("R3BLosMapped2Cal", 1);
-        losMapped2Cal->SetNofModules(1, 8);
-        losMapped2Cal->SetTrigger(1);
-        losMapped2Cal->SetOnline(NOTstorecaldata);
-        run->AddTask(losMapped2Cal);
-    }
+    // if (fLos)
+    // {
+    //     R3BLosMapped2Cal* losMapped2Cal = new R3BLosMapped2Cal("R3BLosMapped2Cal", 1);
+    //     losMapped2Cal->SetNofModules(1, 8);
+    //     losMapped2Cal->SetTrigger(1);
+    //     losMapped2Cal->SetOnline(NOTstorecaldata);
+    //     run->AddTask(losMapped2Cal);
+    // }
 
     // Psp silicon detectors
     if (fPsp)
@@ -547,114 +546,114 @@ void main_online()
 
     // Add online task ------------------------------------
 
-    if (fFrsid)
-    {
-        // --- SCI2 STANDALONE
-        R3BOnlineSpectraSci2* s2online = new R3BOnlineSpectraSci2();
-        s2online->SetNbDetectors(1);
-        s2online->SetNbChannels(3);
-        run->AddTask(s2online);
-    }
+    // if (fFrsid)
+    // {
+    //     // --- SCI2 STANDALONE
+    //     R3BOnlineSpectraSci2* s2online = new R3BOnlineSpectraSci2();
+    //     s2online->SetNbDetectors(1);
+    //     s2online->SetNbChannels(3);
+    //     run->AddTask(s2online);
+    // }
+    //
+    // if (fLos)
+    // {
+        // if (fFrsid)
+        // {
+        //     // --- LOS VS SCI2
+        //     R3BOnlineSpectraLosVsSci2* loss2online = new R3BOnlineSpectraLosVsSci2("R3BOnlineSpectraLosVsSci2", 1);
+        //     loss2online->SetNofLosModules(1); // 1 or 2 LOS detectors
+        //     //  Set parameters for X,Y calibration
+        //     //  (offsetX, offsetY,VeffX,VeffY)
+        //     loss2online->SetLosXYTAMEX(0, 0, 1, 1, 0, 0, 1, 1);
+        //     loss2online->SetLosXYMCFD(1.011, 1.216, 1.27, 1.88, 0, 0, 1, 1); //(0.9781,1.152,1.5,1.5,0,0,1,1);
+        //     loss2online->SetLosXYToT(
+        //         -0.002373, 0.007423, 2.27, 3.22, 0, 0, 1, 1); //(-0.02054,-0.02495,2.5,3.6,0,0,1,1);
+        //     loss2online->SetEpileup(180.);                    // Events with ToT>Epileup are not considered
+        //     loss2online->SetTrigger(1);                       // -1 = no trigger selection
+        //     loss2online->SetTpat(0);                          // if 0, no tpat selection
+        //     // AoQ calibration :
+        //     loss2online->SetToFoffset(fTofOffset);
+        //     loss2online->SetToFmin(-8050);
+        //     loss2online->SetToFmax(8050);
+        //     loss2online->SetTof2InvV_p0(67.69245);
+        //     loss2online->SetTof2InvV_p1(0.007198663);
+        //     loss2online->SetFlightLength(139.915);
+        //     loss2online->SetPos_p0(126.451);
+        //     loss2online->SetPos_p1(56.785);
+        //     loss2online->SetDispersionS2(7000);
+        //     loss2online->SetBrho0_S2toCC(fBrho);
+        //     // 3 parameters for velocity correction, primary beam charge and offset in Z.
+        //     // loss2online->SetBetaCorrectionForZ(-2.12371e7, 4.9473e7,-2.87635e7,50.,-17.3);
+        //     run->AddTask(loss2online);
+        // }
+        // else
+        // {
+            // R3BOnlineSpectraLosStandalone* r3bOnlineSpectra =
+            //     new R3BOnlineSpectraLosStandalone("R3BOnlineSpectraLosStandalone", 1);
+            // r3bOnlineSpectra->SetNofLosModules(1); // 1 or 2 LOS detectors
+            // r3bOnlineSpectra->SetLosXYTAMEX(0, 0, 1, 1, 0, 0, 1, 1);
+            // r3bOnlineSpectra->SetLosXYMCFD(1.011, 1.216, 1.27, 1.88, 0, 0, 1, 1);
+            // r3bOnlineSpectra->SetLosXYToT(-0.002373, 0.007423, 2.27, 3.22, 0, 0, 1, 1);
+            // // Events with ToT>Epileup are not considered
+            // r3bOnlineSpectra->SetEpileup(180.);
+            // // -1 = no trigger selection
+            // r3bOnlineSpectra->SetTrigger(1);
+            // // if 0, no tpat selection
+            // r3bOnlineSpectra->SetTpat(0);
+            // run->AddTask(r3bOnlineSpectra);
+        // }
+    // }
+    //
+    // if (fPsp)
+    // {
+    //     R3BPspxOnlineSpectra* pspOnline = new R3BPspxOnlineSpectra("PspxOnlineSpectra", 1);
+    //     run->AddTask(pspOnline);
+    //     /*
+    //     if (fSci && NumSofSci == 2)
+    //     {
+    //         R3BSofSciVsPspxOnlineSpectra* pspsciOnline = new R3BSofSciVsPspxOnlineSpectra();
+    //         pspsciOnline->SetDispersionS2(7250.);
+    //         pspsciOnline->SetBrho0(9.3148);
+    //         run->AddTask(pspsciOnline);
+    //     }*/
+    // }
+    //
+    // if (fMwpc0)
+    // {
+    //     R3BSofMwpcOnlineSpectra* mw0online = new R3BSofMwpcOnlineSpectra("SofMwpc0OnlineSpectra", 1, "Mwpc0");
+    //     run->AddTask(mw0online);
+    // }
+    //
+    // if (fMusic)
+    // {
+    //     R3BMusicOnlineSpectra* musonline = new R3BMusicOnlineSpectra();
+    //     musonline->SetExpId(expId);
+    //     run->AddTask(musonline);
+    //     if (fMwpc0)
+    //     {
+    //         R3BSofMwpcvsMusicOnlineSpectra* mw0vsmusiconline =
+    //             new R3BSofMwpcvsMusicOnlineSpectra("SofMwpc0vsMusicOnlineSpectra", 1, "Mwpc0");
+    //         run->AddTask(mw0vsmusiconline);
+    //     }
+    // }
+    //
+    // if (fAms)
+    // {
+    //     R3BAmsOnlineSpectra* AmsOnline = new R3BAmsOnlineSpectra();
+    //     run->AddTask(AmsOnline);
+    // }
+    //
+    // if (fCalifa)
+    // {
+    //     R3BCalifaOnlineSpectra* CalifaOnline = new R3BCalifaOnlineSpectra();
+    //     CalifaOnline->SetRange_max(30000); // 30000 -> 30MeV
+    //     CalifaOnline->SetBinChannelFebex(500);
+    //     CalifaOnline->SetMaxBinFebex(10000); // 10000 -> 10MeV
+    //     run->AddTask(CalifaOnline);
+    // }
 
-    if (fLos)
-    {
-        if (fFrsid)
-        {
-            // --- LOS VS SCI2
-            R3BOnlineSpectraLosVsSci2* loss2online = new R3BOnlineSpectraLosVsSci2("R3BOnlineSpectraLosVsSci2", 1);
-            loss2online->SetNofLosModules(1); // 1 or 2 LOS detectors
-            //  Set parameters for X,Y calibration
-            //  (offsetX, offsetY,VeffX,VeffY)
-            loss2online->SetLosXYTAMEX(0, 0, 1, 1, 0, 0, 1, 1);
-            loss2online->SetLosXYMCFD(1.011, 1.216, 1.27, 1.88, 0, 0, 1, 1); //(0.9781,1.152,1.5,1.5,0,0,1,1);
-            loss2online->SetLosXYToT(
-                -0.002373, 0.007423, 2.27, 3.22, 0, 0, 1, 1); //(-0.02054,-0.02495,2.5,3.6,0,0,1,1);
-            loss2online->SetEpileup(180.);                    // Events with ToT>Epileup are not considered
-            loss2online->SetTrigger(1);                       // -1 = no trigger selection
-            loss2online->SetTpat(0);                          // if 0, no tpat selection
-            // AoQ calibration :
-            loss2online->SetToFoffset(fTofOffset);
-            loss2online->SetToFmin(-8050);
-            loss2online->SetToFmax(8050);
-            loss2online->SetTof2InvV_p0(67.69245);
-            loss2online->SetTof2InvV_p1(0.007198663);
-            loss2online->SetFlightLength(139.915);
-            loss2online->SetPos_p0(126.451);
-            loss2online->SetPos_p1(56.785);
-            loss2online->SetDispersionS2(7000);
-            loss2online->SetBrho0_S2toCC(fBrho);
-            // 3 parameters for velocity correction, primary beam charge and offset in Z.
-            // loss2online->SetBetaCorrectionForZ(-2.12371e7, 4.9473e7,-2.87635e7,50.,-17.3);
-            run->AddTask(loss2online);
-        }
-        else
-        {
-            R3BOnlineSpectraLosStandalone* r3bOnlineSpectra =
-                new R3BOnlineSpectraLosStandalone("R3BOnlineSpectraLosStandalone", 1);
-            r3bOnlineSpectra->SetNofLosModules(1); // 1 or 2 LOS detectors
-            r3bOnlineSpectra->SetLosXYTAMEX(0, 0, 1, 1, 0, 0, 1, 1);
-            r3bOnlineSpectra->SetLosXYMCFD(1.011, 1.216, 1.27, 1.88, 0, 0, 1, 1);
-            r3bOnlineSpectra->SetLosXYToT(-0.002373, 0.007423, 2.27, 3.22, 0, 0, 1, 1);
-            // Events with ToT>Epileup are not considered
-            r3bOnlineSpectra->SetEpileup(180.);
-            // -1 = no trigger selection
-            r3bOnlineSpectra->SetTrigger(1);
-            // if 0, no tpat selection
-            r3bOnlineSpectra->SetTpat(0);
-            run->AddTask(r3bOnlineSpectra);
-        }
-    }
-
-    if (fPsp)
-    {
-        R3BPspxOnlineSpectra* pspOnline = new R3BPspxOnlineSpectra("PspxOnlineSpectra", 1);
-        run->AddTask(pspOnline);
-        /*
-        if (fSci && NumSofSci == 2)
-        {
-            R3BSofSciVsPspxOnlineSpectra* pspsciOnline = new R3BSofSciVsPspxOnlineSpectra();
-            pspsciOnline->SetDispersionS2(7250.);
-            pspsciOnline->SetBrho0(9.3148);
-            run->AddTask(pspsciOnline);
-        }*/
-    }
-
-    if (fMwpc0)
-    {
-        R3BSofMwpcOnlineSpectra* mw0online = new R3BSofMwpcOnlineSpectra("SofMwpc0OnlineSpectra", 1, "Mwpc0");
-        run->AddTask(mw0online);
-    }
-
-    if (fMusic)
-    {
-        R3BMusicOnlineSpectra* musonline = new R3BMusicOnlineSpectra();
-        musonline->SetExpId(expId);
-        run->AddTask(musonline);
-        if (fMwpc0)
-        {
-            R3BSofMwpcvsMusicOnlineSpectra* mw0vsmusiconline =
-                new R3BSofMwpcvsMusicOnlineSpectra("SofMwpc0vsMusicOnlineSpectra", 1, "Mwpc0");
-            run->AddTask(mw0vsmusiconline);
-        }
-    }
-
-    if (fAms)
-    {
-        R3BAmsOnlineSpectra* AmsOnline = new R3BAmsOnlineSpectra();
-        run->AddTask(AmsOnline);
-    }
-
-    if (fCalifa)
-    {
-        R3BCalifaOnlineSpectra* CalifaOnline = new R3BCalifaOnlineSpectra();
-        CalifaOnline->SetRange_max(30000); // 30000 -> 30MeV
-        CalifaOnline->SetBinChannelFebex(500);
-        CalifaOnline->SetMaxBinFebex(10000); // 10000 -> 10MeV
-        run->AddTask(CalifaOnline);
-    }
-
-    R3BSofOnlineSpectra* sofonline = new R3BSofOnlineSpectra();
-    run->AddTask(sofonline);
+    // R3BSofOnlineSpectra* sofonline = new R3BSofOnlineSpectra();
+    // run->AddTask(sofonline);
 
     // Initialize -------------------------------------------
     run->Init();
