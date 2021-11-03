@@ -96,13 +96,16 @@ NumDet: Int_t 1
 TofOffset: Float_t -5644.95117
 PosS2Left: Float_t -200
 PosS2Right: Float_t 200
-Tof2InvV_p0: Float_t 67.69245
-Tof2InvV_p1: Float_t 0.007198663
+Tof2InvV_p0: Float_t 67.75
+Tof2InvV_p1: Float_t 0.007205
 Brho0_S2toCC: Float_t 13.0721
 DispersionS2: Float_t 7000
 x0_point: Float_t 0
 y0_point: Float_t 50.39
 rot_ang: Float_t 0.00375
+x0_Aq: Float_t -0.2291
+y0_Aq: Float_t 2.481
+ang_Aq: Float_t 0.0016
 #############################################################################
 #############################################################################
 # Class: Sci2HitPar
@@ -111,6 +114,18 @@ rot_ang: Float_t 0.00375
 [Sci2HitPar]
 Pos_p0: Float_t 126.451
 Pos_p1: Float_t 56.785
+#############################################################################
+#############################################################################
+# Class: LosHitPar
+# Context: LosHitParContext
+#############################################################################
+[LosHitPar]
+p0: Float_t 9.57898
+p1: Float_t 0.334407
+xoffset_MCFD: Float_t 1.011;
+yoffset_MCFD: Float_t 1.216;
+xveff_MCFD: Float_t 4.732;
+yveff_MCFD: Float_t 7.014;
 #############################################################################
 #############################################################################
 # Class:   GladFieldPar
