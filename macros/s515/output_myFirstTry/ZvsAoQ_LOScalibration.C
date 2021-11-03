@@ -133,7 +133,7 @@ void ZvsAoQ_LOScalibration(const Float_t nev = -1)
   else
   {
       cout << "WARNING: Musichit was not found" << endl;
-      fLos = false;
+      fMusic = false;
   }
 
   // LOOP IN THE EVENTS  ----------------------------------
