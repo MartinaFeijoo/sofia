@@ -25,17 +25,20 @@ void julich_online()
   TString ucesb_dir = getenv("UCESB_DIR");
   TString filename, outputFilename, upexps_dir, ucesb_path;
 
-  // filename = "~/lmd/krakow/Plastic_064_data_0013.lmd";
+  //filename = "~/lmd/krakow/Plastic_064_data_0013.lmd";
   // outputFilename = "krakow_Co60_" + oss.str() + ".root";
 
-  filename = "/media/joseluis/data1/juelich_2021/data/068_2021-11-14_18-21-03/data_0001.lmd";
+  //filename = "/media/joseluis/data1/juelich_2021/data/068_2021-11-14_18-21-03/data_0001.lmd";
+  filename = "/home/joseluis/Escritorio/juelich_2021/data/068_2021-11-14_18-21-03/data_0001.lmd";
   outputFilename = "testJulich" + oss.str() + ".root";
 
   upexps_dir = ucesb_dir + "/../upexps"; // for local computers
   ucesb_path = upexps_dir + "/califaJulich21/califa --allow-errors --input-buffer=100Mi";
+  //ucesb_path = upexps_dir + "/califaKrakow17/califa --allow-errors --input-buffer=100Mi";
   ucesb_path.ReplaceAll("//", "/");
 
   TString califamapfilename = "Califa_CalPar.par";
+  //TString califamapfilename = "cepa_mapping.par";
 
   // Online server configuration --------------------------
   Int_t refresh = 1; // Refresh rate for online histograms
@@ -78,15 +81,15 @@ void julich_online()
 
    //tasks
 
-   R3BCalifaMapped2CrystalCal* CalifaMap2Cal = new R3BCalifaMapped2CrystalCal();
-   run->AddTask(CalifaMap2Cal);
-
-   R3BAmsMapped2StripCal* AmsMap2Cal = new R3BAmsMapped2StripCal();
-   run->AddTask(AmsMap2Cal);
-
-   R3BAmsStripCal2Hit* AmsCal2Hit = new R3BAmsStripCal2Hit();
-   AmsCal2Hit->SetJulichConfiguration();
-   run->AddTask(AmsCal2Hit);
+   // R3BCalifaMapped2CrystalCal* CalifaMap2Cal = new R3BCalifaMapped2CrystalCal();
+   // run->AddTask(CalifaMap2Cal);
+   //
+   // R3BAmsMapped2StripCal* AmsMap2Cal = new R3BAmsMapped2StripCal();
+   // run->AddTask(AmsMap2Cal);
+   //
+   // R3BAmsStripCal2Hit* AmsCal2Hit = new R3BAmsStripCal2Hit();
+   // AmsCal2Hit->SetJulichConfiguration();
+   // run->AddTask(AmsCal2Hit);
 
 
    R3BCalifaJulichOnlineSpectra* califaonline = new R3BCalifaJulichOnlineSpectra();
