@@ -25,8 +25,11 @@ void julich_online()
   TString ucesb_dir = getenv("UCESB_DIR");
   TString filename, outputFilename, upexps_dir, ucesb_path;
 
-  filename = "~/lmd/krakow/Plastic_064_data_0013.lmd";
-  outputFilename = "krakow_Co60_" + oss.str() + ".root";
+  // filename = "~/lmd/krakow/Plastic_064_data_0013.lmd";
+  // outputFilename = "krakow_Co60_" + oss.str() + ".root";
+
+  filename = "/media/joseluis/data1/juelich_2021/data/068_2021-11-14_18-21-03/data_0001.lmd";
+  outputFilename = "testJulich" + oss.str() + ".root";
 
   upexps_dir = ucesb_dir + "/../upexps"; // for local computers
   ucesb_path = upexps_dir + "/califaJulich21/califa --allow-errors --input-buffer=100Mi";
@@ -52,20 +55,17 @@ void julich_online()
       new R3BUcesbSource(filename, ntuple_options, ucesb_path, &ucesb_struct, sizeof(ucesb_struct));
   source->SetMaxEvents(nev);
 
-  Bool_t fCalifa = true;  // Califa calorimeter
-  Bool_t fSi = true;  // Silicon detectors
   Bool_t NOTstoremappeddata = false;
 
   source->AddReader(new R3BUnpackReader(&ucesb_struct.unpack, offsetof(EXT_STR_h101, unpack)));
 
   R3BCalifaJulichReader* unpackcalifa;
-  if (fCalifa)
-  {
-      unpackcalifa =
-          new R3BCalifaJulichReader((EXT_STR_h101_CALIFA*)&ucesb_struct.califa, offsetof(EXT_STR_h101, califa));
-          unpackcalifa->SetOnline(NOTstoremappeddata);
-          source->AddReader(unpackcalifa);
-  }
+
+  unpackcalifa =
+      new R3BCalifaJulichReader((EXT_STR_h101_CALIFA*)&ucesb_struct.califa, offsetof(EXT_STR_h101, califa));
+  unpackcalifa->SetOnline(NOTstoremappeddata);
+  source->AddReader(unpackcalifa);
+
 
   run->SetSource(source);
   // Runtime data base ------------------------------------
@@ -77,20 +77,17 @@ void julich_online()
   rtdb->print();
 
    //tasks
-   if(fCalifa)
-   {
-     R3BCalifaMapped2CrystalCal* CalifaMap2Cal = new R3BCalifaMapped2CrystalCal();
-     run->AddTask(CalifaMap2Cal);
-   }
-   if(fSi)
-   {
-     R3BAmsMapped2StripCal* AmsMap2Cal = new R3BAmsMapped2StripCal();
-     run->AddTask(AmsMap2Cal);
 
-     R3BAmsStripCal2Hit* AmsCal2Hit = new R3BAmsStripCal2Hit();
-     AmsCal2Hit->SetJulichConfiguration();
-     run->AddTask(AmsCal2Hit);
-   }
+   R3BCalifaMapped2CrystalCal* CalifaMap2Cal = new R3BCalifaMapped2CrystalCal();
+   run->AddTask(CalifaMap2Cal);
+
+   R3BAmsMapped2StripCal* AmsMap2Cal = new R3BAmsMapped2StripCal();
+   run->AddTask(AmsMap2Cal);
+
+   R3BAmsStripCal2Hit* AmsCal2Hit = new R3BAmsStripCal2Hit();
+   AmsCal2Hit->SetJulichConfiguration();
+   run->AddTask(AmsCal2Hit);
+
 
    R3BCalifaJulichOnlineSpectra* califaonline = new R3BCalifaJulichOnlineSpectra();
    run->AddTask(califaonline);
