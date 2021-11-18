@@ -5,7 +5,7 @@ typedef struct EXT_STR_h101_t
 
 } EXT_STR_h101;
 
-void julich_paramFinder()
+void julich_onlineCANVASDEV()
 {
 
   TStopwatch timer;
@@ -25,18 +25,21 @@ void julich_paramFinder()
   TString ucesb_dir = getenv("UCESB_DIR");
   TString filename, outputFilename, upexps_dir, ucesb_path;
 
-  //filename = "~/lmd/krakow/Co60_gammas_data_0013.lmd";
+  //filename = "~/lmd/krakow/Plastic_064_data_0013.lmd";
+  // outputFilename = "krakow_Co60_" + oss.str() + ".root";
+
+  //filename = "/media/joseluis/data1/juelich_2021/data/068_2021-11-14_18-21-03/data_0001.lmd";
   filename = "/home/joseluis/Escritorio/juelich_2021/data/068_2021-11-14_18-21-03/data_0006.lmd";
-  //outputFilename = "krakow_Co60_" + oss.str() + ".root";
-  outputFilename = "testJulichCalibration_" + oss.str() + ".root";
+  //filename = "--stream=192.168.2.142:9800";
+  outputFilename = "testJulich" + oss.str() + ".root";
 
   upexps_dir = ucesb_dir + "/../upexps"; // for local computers
-  //ucesb_path = upexps_dir + "/califaKrakow17/califa --allow-errors --input-buffer=100Mi";
   ucesb_path = upexps_dir + "/califaJulich21/califa --allow-errors --input-buffer=100Mi";
+  //ucesb_path = upexps_dir + "/califaKrakow17/califa --allow-errors --input-buffer=100Mi";
   ucesb_path.ReplaceAll("//", "/");
 
-  //TString califamapfilename = "cepa_mapping.par";
   TString califamapfilename = "Califa_CalPar.par";
+  //TString califamapfilename = "cepa_mapping.par";
 
   // Online server configuration --------------------------
   Int_t refresh = 1; // Refresh rate for online histograms
@@ -56,19 +59,17 @@ void julich_paramFinder()
       new R3BUcesbSource(filename, ntuple_options, ucesb_path, &ucesb_struct, sizeof(ucesb_struct));
   source->SetMaxEvents(nev);
 
-  Bool_t fCalifa = true;  // Califa calorimeter
   Bool_t NOTstoremappeddata = false;
 
   source->AddReader(new R3BUnpackReader(&ucesb_struct.unpack, offsetof(EXT_STR_h101, unpack)));
 
   R3BCalifaJulichReader* unpackcalifa;
-  if (fCalifa)
-  {
-      unpackcalifa =
-          new R3BCalifaJulichReader((EXT_STR_h101_CALIFA*)&ucesb_struct.califa, offsetof(EXT_STR_h101, califa));
-          unpackcalifa->SetOnline(NOTstoremappeddata);
-          source->AddReader(unpackcalifa);
-  }
+
+  unpackcalifa =
+      new R3BCalifaJulichReader((EXT_STR_h101_CALIFA*)&ucesb_struct.califa, offsetof(EXT_STR_h101, califa));
+  unpackcalifa->SetOnline(NOTstoremappeddata);
+  source->AddReader(unpackcalifa);
+
 
   run->SetSource(source);
   // Runtime data base ------------------------------------
@@ -79,46 +80,29 @@ void julich_paramFinder()
   rtdb->setFirstInput(parIo1);
   rtdb->print();
 
-  //R3BCalifaMapped2CrystalCalPar ----
-  TArrayF* EnergythePeaks = new TArrayF();
-  Float_t e1=1332.5;
-  Float_t e2=1173.2;
-  EnergythePeaks->Set(2);
-  EnergythePeaks->AddAt(e1,0);
-  EnergythePeaks->AddAt(e2,1);
+   //tasks
 
-  R3BCalifaMapped2CrystalCalPar* CalPar = new R3BCalifaMapped2CrystalCalPar();
-  CalPar->SetMinStadistics(1000);
-  CalPar->SetNumParameterFit(2);//OPTIONAL by default 2
-  //Gamma range
-  CalPar->SetCalRange_left(60);
-  CalPar->SetCalRange_right(120);
-  CalPar->SetCalRange_bins(300);
-  //particle range
-  CalPar->SetCalRangeP_left(20);
-  CalPar->SetCalRangeP_right(140);
-  CalPar->SetCalRangeP_bins(120);
-  CalPar->SetSigma(3.0);
-  CalPar->SetThreshold(0.0001);
-  CalPar->SetEnergyPeaks(EnergythePeaks);
-  //CalPar->SetDebugMode(1);
-  run->AddTask(CalPar);
+    R3BCalifaMapped2CrystalCal* CalifaMap2Cal = new R3BCalifaMapped2CrystalCal();
+    run->AddTask(CalifaMap2Cal);
+   //
+    R3BAmsMapped2StripCal* AmsMap2Cal = new R3BAmsMapped2StripCal();
+    run->AddTask(AmsMap2Cal);
+   //
+    //R3BAmsStripCal2Hit* AmsCal2Hit = new R3BAmsStripCal2Hit();
+    //AmsCal2Hit->SetJulichConfiguration();
+    //run->AddTask(AmsCal2Hit);
 
+
+   R3BCalifaJulichOnlineSpectraCANVASDEV* califaonline = new R3BCalifaJulichOnlineSpectraCANVASDEV();
+   run->AddTask(califaonline);
 
   // Initialize -------------------------------------------
   run->Init();
   FairLogger::GetLogger()->SetLogScreenLevel("INFO");
 
-  FairParAsciiFileIo* parIo2 = new FairParAsciiFileIo();
-  parIo2->open("Califa_CalibrationEnergy.par","out");
-  rtdb->setOutput(parIo2);
-
 
   // Run --------------------------------------------------
   run->Run((nev < 0) ? nev : 0, (nev < 0) ? 0 : nev);
-
-  /* Save parameters (if needed) -------------------------- */
-  rtdb->saveOutput();
 
   // Finish -----------------------------------------------
   timer.Stop();

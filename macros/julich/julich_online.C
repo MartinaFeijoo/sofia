@@ -25,11 +25,14 @@ void julich_online()
   TString ucesb_dir = getenv("UCESB_DIR");
   TString filename, outputFilename, upexps_dir, ucesb_path;
 
-  //filename = "~/lmd/krakow/Plastic_064_data_0013.lmd";
+  //for Krakow (testing)
+  // filename = "~/lmd/krakow/Plastic_064_data_0013.lmd";
   // outputFilename = "krakow_Co60_" + oss.str() + ".root";
 
   //filename = "/media/joseluis/data1/juelich_2021/data/068_2021-11-14_18-21-03/data_0001.lmd";
-  filename = "/home/joseluis/Escritorio/juelich_2021/data/068_2021-11-14_18-21-03/data_0001.lmd";
+  //filename = "/home/joseluis/Escritorio/juelich_2021/data/068_2021-11-14_18-21-03/data_0006.lmd";
+  //filename = "/home/joseluis/Escritorio/juelich_2021/data/silicons/data_0006.lmd";
+  filename = "--stream=192.168.2.142:9800";
   outputFilename = "testJulich" + oss.str() + ".root";
 
   upexps_dir = ucesb_dir + "/../upexps"; // for local computers
@@ -41,7 +44,7 @@ void julich_online()
   //TString califamapfilename = "cepa_mapping.par";
 
   // Online server configuration --------------------------
-  Int_t refresh = 1; // Refresh rate for online histograms
+  Int_t refresh = 5; // Refresh rate for online histograms
   Int_t port = 8888; // Port number for the online visualization, example lxgXXXX:8888
   // Create online run ------------------------------------
   R3BEventHeader* EvntHeader = new R3BEventHeader();
@@ -81,15 +84,11 @@ void julich_online()
 
    //tasks
 
-   // R3BCalifaMapped2CrystalCal* CalifaMap2Cal = new R3BCalifaMapped2CrystalCal();
-   // run->AddTask(CalifaMap2Cal);
-   //
-   // R3BAmsMapped2StripCal* AmsMap2Cal = new R3BAmsMapped2StripCal();
-   // run->AddTask(AmsMap2Cal);
-   //
-   // R3BAmsStripCal2Hit* AmsCal2Hit = new R3BAmsStripCal2Hit();
-   // AmsCal2Hit->SetJulichConfiguration();
-   // run->AddTask(AmsCal2Hit);
+    R3BCalifaMapped2CrystalCal* CalifaMap2Cal = new R3BCalifaMapped2CrystalCal();
+    run->AddTask(CalifaMap2Cal);
+
+    //R3BAmsMapped2StripCal* AmsMap2Cal = new R3BAmsMapped2StripCal();
+    //run->AddTask(AmsMap2Cal);
 
 
    R3BCalifaJulichOnlineSpectra* califaonline = new R3BCalifaJulichOnlineSpectra();
