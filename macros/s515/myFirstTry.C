@@ -14,7 +14,7 @@ typedef struct EXT_STR_h101_t
 } EXT_STR_h101;
 
 
-void myFirstTry(const Int_t fRunId = 484, const Int_t nev = -1, const Int_t fExpId = 515)
+void myFirstTry(const Int_t fRunId = 500, const Int_t nev = -1, const Int_t fExpId = 515)
 {
 
   TString cRunId = Form("%04d", fRunId);
@@ -38,7 +38,7 @@ void myFirstTry(const Int_t fRunId = 484, const Int_t nev = -1, const Int_t fExp
   if (fExpId == 515)
   {
       // Input file
-      filename = "~/lmd/s515/main" + cRunId + "_0002.lmd";
+      filename = "/nucl_lustre/s515/stitched/main" + cRunId + "*.lmd";
       outputFilename = "output_myFirstTry/s" + cExpId + "_runId" + cRunId + "_data_offline_" + oss.str() + ".root";
 
       upexps_dir = ucesb_dir  + "/../upexps"; // for local computers
@@ -130,7 +130,9 @@ void myFirstTry(const Int_t fRunId = 484, const Int_t nev = -1, const Int_t fExp
 
   // Calibration files ------------------------------------
   // SOFIA parameters
-  TString sofiacalfilename = "parameters/CalibParam_sofia.par";
+  TString sofiacalfilename;
+  if (fRunId<498) {sofiacalfilename = "parameters/CalibParam_sofia490-497.par";}
+  if (fRunId>=498) {sofiacalfilename = "parameters/CalibParam_sofia498-500.par";}
   sofiacalfilename.ReplaceAll("//", "/");
   // Parameters for LOS
   TString loscalfilename = "parameters/tcal_los_pulser.root";
