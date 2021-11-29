@@ -29,9 +29,8 @@ void julich_online()
   // filename = "~/lmd/krakow/Plastic_064_data_0013.lmd";
   // outputFilename = "krakow_Co60_" + oss.str() + ".root";
 
-  //filename = "/media/joseluis/data1/juelich_2021/data/068_2021-11-14_18-21-03/data_0001.lmd";
-  //filename = "/home/joseluis/Escritorio/juelich_2021/data/068_2021-11-14_18-21-03/data_0006.lmd";
   //filename = "/home/joseluis/Escritorio/juelich_2021/data/silicons/data_0006.lmd";
+  //filename = "/home/joseluis/pushcodes/R3BRoot/sofia/macros/julich/testJulich20211118_171804.root"
   filename = "--stream=192.168.2.142:9800";
   outputFilename = "testJulich" + oss.str() + ".root";
 
