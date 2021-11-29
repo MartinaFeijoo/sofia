@@ -14,7 +14,7 @@ typedef struct EXT_STR_h101_t
 } EXT_STR_h101;
 
 
-void myFirstTry(const Int_t fRunId = 500, const Int_t nev = -1, const Int_t fExpId = 515)
+void myFirstTry(const Int_t fRunId = 493, const Int_t nev = -1, const Int_t fExpId = 515)
 {
 
   TString cRunId = Form("%04d", fRunId);
@@ -38,8 +38,8 @@ void myFirstTry(const Int_t fRunId = 500, const Int_t nev = -1, const Int_t fExp
   if (fExpId == 515)
   {
       // Input file
-      filename = "/nucl_lustre/s515/stitched/main" + cRunId + "*.lmd";
-      outputFilename = "output_myFirstTry/s" + cExpId + "_runId" + cRunId + "_data_offline_" + oss.str() + ".root";
+      filename = "/home/joseluis/lmd/s515/main" + cRunId + "*.lmd";
+      outputFilename = "output_myFirstTry/s" + cExpId + "_runId" + cRunId + "_data_offlineZmusicCAL_" + oss.str() + ".root";
 
       upexps_dir = ucesb_dir  + "/../upexps"; // for local computers
       ucesb_path = upexps_dir + "/202104_s515/202104_s515 --allow-errors --input-buffer=100Mi";
@@ -131,7 +131,7 @@ void myFirstTry(const Int_t fRunId = 500, const Int_t nev = -1, const Int_t fExp
   // Calibration files ------------------------------------
   // SOFIA parameters
   TString sofiacalfilename;
-  if (fRunId<498) {sofiacalfilename = "parameters/CalibParam_sofia490-497.par";}
+  if (fRunId<498) {sofiacalfilename = "parameters/CalibParam_sofia490-497_onlineTOF.par";}
   if (fRunId>=498) {sofiacalfilename = "parameters/CalibParam_sofia498-500.par";}
   sofiacalfilename.ReplaceAll("//", "/");
   // Parameters for LOS

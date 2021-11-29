@@ -1,13 +1,13 @@
 using namespace std;
 
-void ZvsAoQ_LOScalibration(const Float_t nev = -1)
+void ZvsAoQ_LOScalibration(const Float_t nev = 1e5)
 {
   TStopwatch timer;
   // Initialize -------------------------------------------
   timer.Start();
 
   // INPUT FILE
-  TString filename = "s515_runId0496_data_offline_20211124_144935.root";
+  TString filename = "s515_runId0497_data_offline_20211125_155551.root";
   cout << "Input: " << filename << endl;
 
   // READING FILE AND TREE
@@ -34,40 +34,27 @@ void ZvsAoQ_LOScalibration(const Float_t nev = -1)
   TH1F* h49_proyec = new TH1F("h49_proyec","Zlos (Zmusic = 49)",600,105,130);
   TH1F* h48_proyec = new TH1F("h48_proyec","Zlos (Zmusic = 48)",600,105,130);
 
-  // first points are for run 484
-  // then for 490-497
-  // and finally for 498-500
+  TH2F* h51_Zs = new TH2F("h51_Zs","ZlosZmusic (Zmusic = 51)",500,45,55,500,45,55);
+  TH2F* h50_Zs = new TH2F("h50_Zs","ZlosZmusic (Zmusic = 50)",500,45,55,500,45,55);
+  TH2F* h49_Zs = new TH2F("h49_Zs","ZlosZmusic (Zmusic = 49)",500,45,55,500,45,55);
+  TH2F* h48_Zs = new TH2F("h48_Zs","ZlosZmusic (Zmusic = 48)",500,45,55,500,45,55);
+
+
   TCutG *cut_Zmusic51 = new TCutG("musicVSlosZ51",8);
   cut_Zmusic51->SetVarX("MusicHitData.fZ");
   cut_Zmusic51->SetVarY("LosHit.fZ");
   cut_Zmusic51->SetTitle("_Zmusic51raph");
   cut_Zmusic51->SetFillStyle(1000);
-  // cut_Zmusic51->SetPoint(0,51.00547,130.2001);
-  // cut_Zmusic51->SetPoint(1,50.561,126.1921);
-  // cut_Zmusic51->SetPoint(2,50.66137,118.997);
-  // cut_Zmusic51->SetPoint(3,51.27072,117.3068);
-  // cut_Zmusic51->SetPoint(4,51.72237,120.7837);
-  // cut_Zmusic51->SetPoint(5,51.46429,129.7172);
-  // cut_Zmusic51->SetPoint(6,51.01264,130.2001);
-  // cut_Zmusic51->SetPoint(7,51.00547,130.2001);
+  cut_Zmusic51->SetPoint(0,50.95109,132.4142);
+  cut_Zmusic51->SetPoint(1,50.52838,123.1794);
+  cut_Zmusic51->SetPoint(2,50.69444,114.8681);
+  cut_Zmusic51->SetPoint(3,51.14734,111.0422);
+  cut_Zmusic51->SetPoint(4,51.63798,119.0897);
+  cut_Zmusic51->SetPoint(5,51.5776,128.4565);
+  cut_Zmusic51->SetPoint(6,50.95109,132.4802);
+  cut_Zmusic51->SetPoint(7,50.95109,132.4802);
+  cut_Zmusic51->SetPoint(8,50.95109,132.4142);
 
-  cut_Zmusic51->SetPoint(0,51.34176,53.16414);
-  cut_Zmusic51->SetPoint(1,50.83147,52.21899);
-  cut_Zmusic51->SetPoint(2,50.92531,50.85378);
-  cut_Zmusic51->SetPoint(3,51.38869,49.7616);
-  cut_Zmusic51->SetPoint(4,51.76408,51.0008);
-  cut_Zmusic51->SetPoint(5,51.68783,52.99611);
-  cut_Zmusic51->SetPoint(6,51.3359,53.14314);
-  cut_Zmusic51->SetPoint(7,51.34176,53.16414);
-
-  // cut_Zmusic51->SetPoint(0,51.70542,53.91047);
-  // cut_Zmusic51->SetPoint(1,51.21272,53.03544);
-  // cut_Zmusic51->SetPoint(2,51.24791,50.93065);
-  // cut_Zmusic51->SetPoint(3,51.76408,50.36306);
-  // cut_Zmusic51->SetPoint(4,52.21572,52.18406);
-  // cut_Zmusic51->SetPoint(5,52.13947,53.83952);
-  // cut_Zmusic51->SetPoint(6,51.72302,53.93412);
-  // cut_Zmusic51->SetPoint(7,51.70542,53.91047);
 
 
   TCutG *cut_Zmusic50 = new TCutG("musicVSlosZ50",13); //los vs music (Zmusic = 50)
@@ -75,69 +62,29 @@ void ZvsAoQ_LOScalibration(const Float_t nev = -1)
   cut_Zmusic50->SetVarY("LosHit.fZ");
   cut_Zmusic50->SetTitle("Graph");
   cut_Zmusic50->SetFillStyle(1000);
-  // cut_Zmusic50->SetPoint(0,49.89855,129.582);
-  // cut_Zmusic50->SetPoint(1,49.25091,126.5687);
-  // cut_Zmusic50->SetPoint(2,49.18448,123.3816);
-  // cut_Zmusic50->SetPoint(3,49.20939,119.8469);
-  // cut_Zmusic50->SetPoint(4,49.44188,115.9644);
-  // cut_Zmusic50->SetPoint(5,49.66606,112.6614);
-  // cut_Zmusic50->SetPoint(6,50.01479,112.7773);
-  // cut_Zmusic50->SetPoint(7,50.5462,116.37);
-  // cut_Zmusic50->SetPoint(8,50.49638,121.1796);
-  // cut_Zmusic50->SetPoint(9,50.42165,127.322);
-  // cut_Zmusic50->SetPoint(10,50.15595,129.3502);
-  // cut_Zmusic50->SetPoint(11,49.91516,129.4661);
-  // cut_Zmusic50->SetPoint(12,49.89855,129.582);
+  cut_Zmusic50->SetPoint(0,49.86966,130.5733);
+  cut_Zmusic50->SetPoint(1,49.48514,121.8633);
+  cut_Zmusic50->SetPoint(2,49.67414,109.7354);
+  cut_Zmusic50->SetPoint(3,50.18248,107.1444);
+  cut_Zmusic50->SetPoint(4,50.61913,113.5943);
+  cut_Zmusic50->SetPoint(5,50.41058,127.5965);
+  cut_Zmusic50->SetPoint(6,49.87617,130.4079);
+  cut_Zmusic50->SetPoint(7,49.86966,130.5733);
 
-  cut_Zmusic50->SetPoint(0,50.02203,52.65987);
-  cut_Zmusic50->SetPoint(1,49.44721,50.92337);
-  cut_Zmusic50->SetPoint(2,49.76395,48.77343);
-  cut_Zmusic50->SetPoint(3,50.44434,48.7183);
-  cut_Zmusic50->SetPoint(4,50.72002,50.6753);
-  cut_Zmusic50->SetPoint(5,50.50886,52.27398);
-  cut_Zmusic50->SetPoint(6,50.03376,52.68743);
-  cut_Zmusic50->SetPoint(7,50.02203,52.65987);
-
-  // cut_Zmusic50->SetPoint(0,50.35636,53.48837);
-  // cut_Zmusic50->SetPoint(1,49.83433,52.35849);
-  // cut_Zmusic50->SetPoint(2,49.83433,50.42155);
-  // cut_Zmusic50->SetPoint(3,50.39742,49.02938);
-  // cut_Zmusic50->SetPoint(4,51.06022,50.7242);
-  // cut_Zmusic50->SetPoint(5,51.03676,53.04449);
-  // cut_Zmusic50->SetPoint(6,50.35636,53.44802);
-  // cut_Zmusic50->SetPoint(7,50.35636,53.48837);
 
   TCutG *cut_Zmusic49 = new TCutG("musicVSlosZ49",8);
   cut_Zmusic49->SetVarX("MusicHitData.fZ");
   cut_Zmusic49->SetVarY("LosHit.fZ");
   cut_Zmusic49->SetTitle("Graph");
   cut_Zmusic49->SetFillStyle(1000);
-  // cut_Zmusic49->SetPoint(0,48.39685,124.1776);
-  // cut_Zmusic49->SetPoint(1,47.92407,121.0461);
-  // cut_Zmusic49->SetPoint(2,48.08166,111.6513);
-  // cut_Zmusic49->SetPoint(3,48.65294,108.7961);
-  // cut_Zmusic49->SetPoint(4,49.20451,113.125);
-  // cut_Zmusic49->SetPoint(5,49.12572,122.3355);
-  // cut_Zmusic49->SetPoint(6,48.41655,124.2697);
-  // cut_Zmusic49->SetPoint(7,48.39685,124.1776);
-
-  cut_Zmusic49->SetPoint(0,48.70816,52.1086);
-  cut_Zmusic49->SetPoint(1,48.18613,50.73043);
-  cut_Zmusic49->SetPoint(2,48.36796,48.35998);
-  cut_Zmusic49->SetPoint(3,48.87239,46.67861);
-  cut_Zmusic49->SetPoint(4,49.38269,49.07663);
-  cut_Zmusic49->SetPoint(5,49.32404,51.2817);
-  cut_Zmusic49->SetPoint(6,48.67883,52.08104);
-  cut_Zmusic49->SetPoint(7,48.70816,52.1086);
-
-  // cut_Zmusic49->SetPoint(0,48.96624,52.60062);
-  // cut_Zmusic49->SetPoint(1,48.5146,51.06242);
-  // cut_Zmusic49->SetPoint(2,48.497,49.15592);
-  // cut_Zmusic49->SetPoint(3,49.1598,47.79103);
-  // cut_Zmusic49->SetPoint(4,49.73462,50.00084);
-  // cut_Zmusic49->SetPoint(5,49.64664,52.10233);
-  // cut_Zmusic49->SetPoint(6,48.96038,52.55729);
-  // cut_Zmusic49->SetPoint(7,48.96624,52.60062);
+  cut_Zmusic49->SetPoint(0,48.85949,126.8798);
+  cut_Zmusic49->SetPoint(1,48.48149,117.6736);
+  cut_Zmusic49->SetPoint(2,48.67701,106.3175);
+  cut_Zmusic49->SetPoint(3,49.25052,103.3958);
+  cut_Zmusic49->SetPoint(4,49.65459,111.1687);
+  cut_Zmusic49->SetPoint(5,49.34176,125.5017);
+  cut_Zmusic49->SetPoint(6,48.83994,126.7696);
+  cut_Zmusic49->SetPoint(7,48.85949,126.8798);
 
 
   TCutG *cut_Zmusic48 = new TCutG("musicVSlosZ48",8);
@@ -145,32 +92,14 @@ void ZvsAoQ_LOScalibration(const Float_t nev = -1)
   cut_Zmusic48->SetVarY("LosHit.fZ");
   cut_Zmusic48->SetTitle("Graph");
   cut_Zmusic48->SetFillStyle(1000);
-  // cut_Zmusic48->SetPoint(0,47.06973,123.0533);
-  // cut_Zmusic48->SetPoint(1,46.48905,118.176);
-  // cut_Zmusic48->SetPoint(2,46.79015,107.311);
-  // cut_Zmusic48->SetPoint(3,47.39234,105.5243);
-  // cut_Zmusic48->SetPoint(4,47.98019,109.5323);
-  // cut_Zmusic48->SetPoint(5,47.65042,122.3772);
-  // cut_Zmusic48->SetPoint(6,47.06973,123.0533);
-  // cut_Zmusic48->SetPoint(7,47.06973,123.0533);
-
-  cut_Zmusic48->SetPoint(0,47.38843,50.86825);
-  cut_Zmusic48->SetPoint(1,46.90746,49.8484);
-  cut_Zmusic48->SetPoint(2,46.89572,48.16703);
-  cut_Zmusic48->SetPoint(3,47.45881,45.52095);
-  cut_Zmusic48->SetPoint(4,47.96911,47.42282);
-  cut_Zmusic48->SetPoint(5,47.99257,49.95865);
-  cut_Zmusic48->SetPoint(6,47.42362,50.95094);
-  cut_Zmusic48->SetPoint(7,47.38843,50.86825);
-
-  // cut_Zmusic48->SetPoint(0,47.64064,51.66228);
-  // cut_Zmusic48->SetPoint(1,47.13621,50.41663);
-  // cut_Zmusic48->SetPoint(2,47.23592,48.23676);
-  // cut_Zmusic48->SetPoint(3,47.89286,46.74643);
-  // cut_Zmusic48->SetPoint(4,48.41489,49.77157);
-  // cut_Zmusic48->SetPoint(5,48.35036,51.5733);
-  // cut_Zmusic48->SetPoint(6,47.65824,51.64004);
-  // cut_Zmusic48->SetPoint(7,47.64064,51.66228);
+  cut_Zmusic48->SetPoint(0,47.97967,122.2492);
+  cut_Zmusic48->SetPoint(1,47.69291,114.8622);
+  cut_Zmusic48->SetPoint(2,47.86236,105.7111);
+  cut_Zmusic48->SetPoint(3,48.26642,102.8997);
+  cut_Zmusic48->SetPoint(4,48.53363,109.1841);
+  cut_Zmusic48->SetPoint(5,48.3316,121.3671);
+  cut_Zmusic48->SetPoint(6,47.97315,122.0287);
+  cut_Zmusic48->SetPoint(7,47.97967,122.2492);
 
 
   // Header Data
@@ -274,19 +203,19 @@ void ZvsAoQ_LOScalibration(const Float_t nev = -1)
       AoQfrs = frsdata[0]->GetAq();
       }
 
-      if (frsHits > 0 && LosHits > 0 && AoQfrs>0)
+      if (frsHits > 0 && LosHits > 0 &&AoQfrs>0 &&Zlos>0)
       {
         if(cut_Zmusic51->IsInside(Zmusic,Zlos))
-          {h51->Fill(AoQfrs,Zlos); h51_proyec->Fill(Zlos);}
+          {h51->Fill(AoQfrs,Zlos); h51_proyec->Fill(Zlos); h51_Zs->Fill(Zmusic,Zlos);}
 
         if(cut_Zmusic50->IsInside(Zmusic,Zlos))
-          {h50->Fill(AoQfrs,Zlos); h50_proyec->Fill(Zlos);}
+          {h50->Fill(AoQfrs,Zlos); h50_proyec->Fill(Zlos); h50_Zs->Fill(Zmusic,Zlos);}
 
         if(cut_Zmusic49->IsInside(Zmusic,Zlos))
-          {h49->Fill(AoQfrs,Zlos); h49_proyec->Fill(Zlos);}
+          {h49->Fill(AoQfrs,Zlos); h49_proyec->Fill(Zlos); h49_Zs->Fill(Zmusic,Zlos);}
 
         if(cut_Zmusic48->IsInside(Zmusic,Zlos))
-          {h48->Fill(AoQfrs,Zlos); h48_proyec->Fill(Zlos);}
+          {h48->Fill(AoQfrs,Zlos); h48_proyec->Fill(Zlos); h48_Zs->Fill(Zmusic,Zlos);}
 
         h_all->Fill(AoQfrs,Zlos);
       }
