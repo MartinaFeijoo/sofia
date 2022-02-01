@@ -193,7 +193,7 @@ void myFirstTry(const Int_t fRunId = 493, const Int_t nev = -1, const Int_t fExp
       run->AddTask(losMapped2Cal);
 
       R3BLosCal2Hit* losCal2Hit = new R3BLosCal2Hit("R3BLosCal2Hit",1);
-      losCal2Hit->SetLosInput(0,"./walk_param_empty.dat","./tot_param_empty.dat");
+      losCal2Hit->SetLosInput(kFALSE,"./walk_param_empty.dat","./tot_param_empty.dat");
       losCal2Hit->SetTrigger(1);
       losCal2Hit->SetTpat(0);
       run->AddTask(losCal2Hit);
