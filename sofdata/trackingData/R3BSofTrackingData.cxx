@@ -12,6 +12,7 @@ R3BSofTrackingData::R3BSofTrackingData()
     , fAq(0.)
     , fBeta(0.)
     , fLength(0.)
+    , fLength_fib(0.)
     , fBrho(0.)
     , fPaddle(0)
 {
@@ -23,12 +24,14 @@ R3BSofTrackingData::R3BSofTrackingData(Double_t z,
                                        Double_t aq,
                                        Double_t beta,
                                        Double_t length,
+                                       Double_t length_fib,
                                        Double_t brho,
                                        Int_t paddle)
     : fZ(z)
     , fAq(aq)
     , fBeta(beta)
     , fLength(length)
+    , fLength_fib(length_fib)
     , fBrho(brho)
     , fPaddle(paddle)
 {

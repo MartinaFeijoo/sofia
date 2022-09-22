@@ -24,7 +24,7 @@ class R3BSofTrackingData : public TObject
      *@param fBrho   Brho of fragments
      *@param fPaddle Paddle ID of TofW
      **/
-    R3BSofTrackingData(Double_t z, Double_t aq, Double_t beta, Double_t length, Double_t brho, Int_t paddle = 0);
+    R3BSofTrackingData(Double_t z, Double_t aq, Double_t beta, Double_t length, Double_t length_fib, Double_t brho, Int_t paddle = 0);
 
     // Destructor
     virtual ~R3BSofTrackingData() {}
@@ -35,11 +35,12 @@ class R3BSofTrackingData : public TObject
     inline const Double_t GetBeta() const { return fBeta; }
     inline const Double_t GetBrho() const { return fBrho; }
     inline const Double_t GetLength() const { return fLength; }
+    inline const Double_t GetLength_fib() const { return fLength_fib; }
     inline const Int_t GetPaddle() const { return fPaddle; }
 
   protected:
     Double_t fZ, fAq; // ID
-    Double_t fBeta, fBrho, fLength;
+    Double_t fBeta, fBrho, fLength, fLength_fib;
     Int_t fPaddle;
 
   public:
